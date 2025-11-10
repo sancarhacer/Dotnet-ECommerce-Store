@@ -1,0 +1,47 @@
+# Genellikle .NET/C# projelerinde yoksayılması gerekenler
+
+## Binaries ve obj klasörleri
+**/[Bb]in/
+**/[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+## Visual Studio/Rider dosyaları
+*.pdb
+*.suo
+*.user
+*.useros
+*.sln.docstates
+*.vsproj.user
+*.vsp
+*.vsw
+*.bak
+*.code-workspace
+
+## Paketler
+# NuGet paketleri
+**/packages/
+
+
+## Loglar, test çıktıları ve diğer geçici dosyalar
+*.log
+*.rpt
+*.tlog
+TestResults/
+.vs/
+
+## Veritabanı ve yerel yapılandırma
+
+*.db
+*.sqlite
+
+
+# Secret Manager files
+*.usersecrets
+
+## Dotnet tool cache
+.config/dotnet-tools.json
+.config/dotnet-tools.config
+
+## Başka olası geçici dosyalar
+[Tt]emp/
