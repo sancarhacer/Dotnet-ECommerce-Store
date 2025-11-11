@@ -55,4 +55,39 @@ public class KategoriController : Controller
         return RedirectToAction("Index");
     }
 
+    public ActionResult Edit(int id)
+    {
+        var entitiy = _context.Kategoriler.Select(i => new KategoriEditModel
+        {
+            Id = i.Id,
+            KategoriAdi = i.KategoriAdi,
+            Url = i.Url,
+
+        }).FirstOrDefault(i => i.Id == id);
+        return View(entitiy);
+    }
+
+    [HttpPost]
+    public ActionResult Edit(int id, KategoriEditModel model)
+    {
+        if (id != model.Id)
+        {
+            NotFound();
+        }
+
+        var entitiy = _context.Kategoriler.FirstOrDefault(i => i.Id == id);
+        if (entitiy != null)
+        {
+            entitiy.KategoriAdi = model.KategoriAdi;
+            entitiy.Url = model.Url;
+            _context.SaveChanges();
+
+            TempData["Mesaj"] = $"{entitiy.KategoriAdi} kategorisi güncellendi";
+
+            return RedirectToAction("Index");
+        }
+
+        return View(model);
+    }
+
 }
