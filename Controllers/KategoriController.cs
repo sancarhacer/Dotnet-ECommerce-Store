@@ -2,9 +2,12 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using dotnet_store.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnet_store.Controllers;
 
+
+[Authorize(Roles = "Admin")]
 public class KategoriController : Controller
 {
     private readonly DataContext _context;
@@ -14,10 +17,14 @@ public class KategoriController : Controller
     }
 
 
+    
     public ActionResult Index()
     {
+        //var kategoriler = _context.Kategoriler.Include(i => Uruns).ToList();
+        //yukarıda sadece urun sayısı ihtiyacımız olmasına rağmen tüm ürünleri çekiyoruz perfonmaslı değil
         // Select (Projection): Veritabanından sadece ihtiyacımız olan alanları çekiyoruz.
         // Bu, veritabanı trafiğini azaltır ve performansı artırır.
+        
         var kategoriler = _context.Kategoriler.Select(i => new KategoriGetModel
         {
             Id = i.Id,
@@ -45,14 +52,21 @@ public class KategoriController : Controller
     [HttpPost]
     public ActionResult Create(KategoriCreateModel model)
     {
-        var entitiy = new Kategori
+
+        if (ModelState.IsValid)
         {
-            KategoriAdi = model.KategoriAdi,
-            Url = model.Url
-        };
-        _context.Kategoriler.Add(entitiy);
-        _context.SaveChanges();
-        return RedirectToAction("Index");
+            var entitiy = new Kategori
+            {
+                KategoriAdi = model.KategoriAdi,
+                Url = model.Url
+            };
+            _context.Kategoriler.Add(entitiy);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+        return View(model);
+
     }
 
     public ActionResult Edit(int id)
@@ -74,20 +88,57 @@ public class KategoriController : Controller
         {
             NotFound();
         }
+        if (ModelState.IsValid)
+        {
+            var entitiy = _context.Kategoriler.FirstOrDefault(i => i.Id == id);
+            if (entitiy != null)
+            {
+                entitiy.KategoriAdi = model.KategoriAdi;
+                entitiy.Url = model.Url;
+                _context.SaveChanges();
+                
+                //farklı action methoda gidince tempdata ya ulaşılabilir
+                TempData["Mesaj"] = $"{entitiy.KategoriAdi} kategorisi güncellendi";
 
+                return RedirectToAction("Index");
+            }
+
+
+        }
+        return View(model);
+    }
+
+    public ActionResult Delete(int? id)
+    {
+        if (id == null)
+        {
+            return RedirectToAction("Index");
+        }
+        var entity = _context.Kategoriler.FirstOrDefault(i => i.Id == id);
+        if (entity != null)
+        {
+            return View(entity);
+        }
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult DeleteConfirm(int? id)
+    {
+        if (id == null)
+        {
+            return RedirectToAction("Index");
+        }
         var entitiy = _context.Kategoriler.FirstOrDefault(i => i.Id == id);
         if (entitiy != null)
         {
-            entitiy.KategoriAdi = model.KategoriAdi;
-            entitiy.Url = model.Url;
+            _context.Kategoriler.Remove(entitiy);
             _context.SaveChanges();
-
             TempData["Mesaj"] = $"{entitiy.KategoriAdi} kategorisi güncellendi";
-
-            return RedirectToAction("Index");
+           
         }
-
-        return View(model);
+        return RedirectToAction("Index");
     }
+
 
 }

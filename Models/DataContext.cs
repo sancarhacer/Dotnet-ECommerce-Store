@@ -1,9 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_store.Models;
 
-public class DataContext : DbContext
+//DbContext sınıfındaki özelliklerin hepsini kalıtım yoluyla aktarılır datacontex e
+// public class DataContext : IdentityDbContext<IdentityUser>
+public class DataContext : IdentityDbContext<AppUser, AppRole, int>
 {
+    //DataContext _context =new DataContext() 
+    // nesne oluşturmak istediğimizde aşağıdaki constructor çalıştırılır
+        //program.cs de tanımlaamalarımız options olarak datacontexte göndermiş oluyoruz
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
 

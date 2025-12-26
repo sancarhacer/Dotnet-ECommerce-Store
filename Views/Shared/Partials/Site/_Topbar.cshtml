@@ -7,18 +7,49 @@
 
             <div class="col-lg-5 col-sm-8 col-8 order-lg-last">
                 <div class="text-end">
-                    <a href="#" class="btn btn-light">
-                        <i class="fa fa-user"></i> <span class="ms-1 d-none d-sm-inline-block">Hesabım</span>
+
+                    @if(User.Identity?.IsAuthenticated == true){
+
+                        if(User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="btn btn-danger" target="_blank">
+                            <i class="fa-solid fa-lock"></i> <span class="ms-1 d-none d-sm-inline-block">Admin</span>
+                            </a>
+                        }
+                        <a asp-controller="Account" asp-action="EditUser" class="btn btn-light">
+                            <i class="fa fa-user"></i> <span class="ms-1 d-none d-sm-inline-block">Hesabım</span>
+                        </a>
+                        
+
+                        <a asp-controller="Account" asp-action="LogOut" class="btn btn-light">
+                            <i class="fa fa-user"></i> <span class="ms-1 d-none d-sm-inline-block">Çıkış Yap</span>
+                        </a>
+                        }
+                    else{
+
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-light">
+                        <i class="fa-solid fa-right-to-bracket"></i> <span class="ms-1 d-none d-sm-inline-block">Giriş</span>
                     </a>
-                    <a href="#" class="btn btn-light">
-                        <i class="fa fa-heart"></i> <span class="ms-1 d-none d-sm-inline-block">Listem</span>
+                    <a asp-controller="Account" asp-action="Create" class="btn btn-light">
+                        <i class="fa-solid fa-user-plus"></i> <span class="ms-1 d-none d-sm-inline-block">Üyeol</span>
                     </a>
+                    }
+
                     <a href="shopping-cart.html" class="btn btn-light">
                         <i class="fa fa-shopping-cart"></i> <span class="ms-1 d-none d-sm-inline-block">Sepetim</span>
                     </a>
                 </div>
             </div>
             <div class="col-lg-5">
+                @* asp-controller="Urun" → Form gönderildiğinde isteğin gideceği controller: UrunController.
+                    asp-action="List" → Bu controller içinde çalıştırılacak action metodu: List.
+                    method="get" → Form verisi URL üzerinden gönderilecek. (URL query string şeklinde: ?q=aranankelime)
+                    Yani kullanıcı formu doldurup gönderdiğinde tarayıcı şu URL’i oluşturur gibi düşünebilirsin:
+                    /Urun/List?q=aranankelime 
+                     name="q" → Form verisinin anahtarı. Controller’daki List(string q) parametresiyle eşleşir.
+                    value="@ViewData["q"]" → Eğer kullanıcı daha önce bir arama yaptıysa, arama kutusuna o değeri geri getirir.
+                    Bu sayede sayfa yenilense bile kullanıcı yazdığı kelime kaybolmaz. *@
+                    @* özetle: ilgili formu ilgili bilgilerle ilgili adrese get metodu yardımıyla gönderecektir. *@
                 <form asp-controller="Urun" asp-action="List" method="get">
                     <div class="input-group">
                         <input name="q" type="text" placeholder="Anahtar kelime" class="form-control"

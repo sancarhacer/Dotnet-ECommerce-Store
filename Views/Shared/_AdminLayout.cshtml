@@ -24,6 +24,9 @@
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts",required:false)
+    @* Bu satır, projenizin ana şablon dosyasında (_Layout.cshtml) yer alan ve sayfalara özel JavaScript kodlarının 
+    nereye "enjekte edileceğini" belirleyen bir yer tutucudur. *@
 </body>
 
 </html>

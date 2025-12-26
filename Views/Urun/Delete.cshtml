@@ -1,0 +1,23 @@
+@model Urun
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <p>
+                    @Model.UrunAdi isimli dosyayı silmek istiyoru musunu?
+                </p>
+                <form asp-controller="Urun" asp-action="DeleteConfirm" method="post" >
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <button type="sumbit" class="btn btn-danger" >Sil</button>
+                    <a asp-controller="Urun" asp-action="Index" class="btn btn-primary">İptal</a>
+        
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

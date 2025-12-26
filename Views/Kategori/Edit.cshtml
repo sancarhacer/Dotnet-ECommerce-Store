@@ -13,18 +13,21 @@
                 </a>
             </div>
             <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
                 <form method="post" >
                 <input type="hidden" name="Id" value="@Model.Id">
                     <div class="row mb-3">
                         <label asp-for="KategoriAdi" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-10">
                             <input asp-for="KategoriAdi" class="form-control">
+                            <span  asp-validation-for="KategoriAdi" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label asp-for="Url" class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-10">
                             <input asp-for="Url" class="form-control">
+                            <span  asp-validation-for="Url" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -37,3 +40,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
